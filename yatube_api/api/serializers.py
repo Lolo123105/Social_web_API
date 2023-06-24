@@ -11,6 +11,7 @@ User = get_user_model()
 
 
 class PostSerializer(serializers.ModelSerializer):
+    """ Post serializer."""
     author = SlugRelatedField(slug_field='username', read_only=True)
 
     class Meta:
@@ -19,6 +20,7 @@ class PostSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    """Comment serializer."""
     author = serializers.SlugRelatedField(
         read_only=True, slug_field='username'
     )
@@ -32,13 +34,14 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class GroupSerializer(serializers.ModelSerializer):
-
+    """Group serializer."""
     class Meta:
         model = Group
         fields = '__all__'
 
 
 class FollowSerializer(serializers.ModelSerializer):
+    """Follows serializer."""
     user = serializers.SlugRelatedField(
         read_only=True,
         slug_field='username',
@@ -62,5 +65,5 @@ class FollowSerializer(serializers.ModelSerializer):
     def validate(self, data):
         if data['following'] == self.context['request'].user:
             raise serializers.ValidationError(
-                'Имя не может совпадать с цветом!')
+                'Нельзя подписаться на самого себя!')
         return data

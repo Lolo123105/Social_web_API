@@ -1,3 +1,19 @@
+REST API социальной сети YaTube (Яндекс.Практикум) 
+=====
+
+Описание проекта
+----------
+Проект создан в рамках учебного курса Яндекс.Практикум.
+
+Стек технологий
+----------
+* Python 3.9
+* Django 3.2 
+* Django Rest Framework
+* Pytest
+* Simple-JWT
+* SQLite3
+
 1. Клонировать репозиторий и перейти в него через командную строку:
 ```bash
 git clone git@github.com:Lolo123105/api_final_yatube.git

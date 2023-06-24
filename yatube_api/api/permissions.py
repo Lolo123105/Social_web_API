@@ -2,6 +2,7 @@ from rest_framework import permissions
 
 
 class AuthorOrReadOnly(permissions.BasePermission):
+    """ Only author has permission to modify. """
 
     def has_permission(self, request, view):
         return (

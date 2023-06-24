@@ -1,24 +1,18 @@
-from rest_framework import viewsets, permissions
 from django.shortcuts import get_object_or_404
+from rest_framework import filters, mixins, viewsets, permissions
+from rest_framework.pagination import LimitOffsetPagination
+
 from posts.models import Post, Group, Follow
 from .serializers import PostSerializer, GroupSerializer
 from .serializers import CommentSerializer, FollowSerializer
-from rest_framework.pagination import LimitOffsetPagination
 from .permissions import AuthorOrReadOnly
-from rest_framework import permissions
-from rest_framework import filters
-from rest_framework import mixins
-
-
-class ListCreateViewSet(
-    mixins.ListModelMixin,
-    mixins.CreateModelMixin,
-    viewsets.GenericViewSet
-):
-    pass
 
 
 class PostViewSet(viewsets.ModelViewSet):
+    """
+    A viewset for posts that provides all default actions
+    after permissions.
+    """
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     pagination_class = LimitOffsetPagination
@@ -29,11 +23,16 @@ class PostViewSet(viewsets.ModelViewSet):
 
 
 class GroupViewSet(viewsets.ReadOnlyModelViewSet):
+    """ A viewset for groups that provides all default actions."""
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
 
 
 class CommentViewSet(viewsets.ModelViewSet):
+    """
+    A viewset for comments that provides all default actions
+    after permissions.
+    """
     serializer_class = CommentSerializer
     permission_classes = (AuthorOrReadOnly,)
 
@@ -50,7 +49,14 @@ class CommentViewSet(viewsets.ModelViewSet):
         serializer.save(author=author, post=post)
 
 
-class FollowViewSet(ListCreateViewSet):
+class FollowViewSet(mixins.ListModelMixin,
+                    mixins.CreateModelMixin,
+                    viewsets.GenericViewSet
+                    ):
+    """
+    A viewset for follows that provides 'list' and 'create' actions
+    after permissions.
+    """
     serializer_class = FollowSerializer
     permission_classes = (permissions.IsAuthenticated,)
     filter_backends = (filters.SearchFilter,)
